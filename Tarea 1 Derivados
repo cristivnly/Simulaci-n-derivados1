@@ -1,0 +1,56 @@
+rm(list=ls())
+
+#librerías necesarias
+library(ggplot2)
+library(tidyverse)
+
+#Insertar una semilla para todos los integrantes del grupo trabajar con el mismo set de datos.
+set.seed(1313)
+
+#Creación de data frame en base a vectores creados necesariamente.
+data <- data.frame(
+  x=c(1:100),
+  y=c(sample(0:1,100, replace =  TRUE))
+)
+
+#Cálculo de media, varianza y desviación estandar.
+mean(data$y)
+var(data$y)
+sd(data$y)
+
+# plot 1 (pirulito)
+ggplot(data, aes(x=x, y=y)) +
+  geom_segment( aes(x=x, xend=x, y=0, yend=y)) +
+  geom_point( size=0.5, color="blue", fill=alpha("blue", 0.3), alpha=0.7, shape=1, stroke=2) 
+
+#Creación de un nuevo vector (suma acumulada)
+z <- cumsum(data$y)
+
+#Agregar vector al data frame
+data <- cbind(data, z)
+
+#Cálculo de media, varianza y desviación estandar.
+mean(data$z)
+var(data$z)
+sd(data$z)
+
+#plot 2 (acumulada)
+ggplot(data, aes(x=x, y=z)) +
+  geom_segment( aes(x=x, xend=x, y=0, yend=z)) +
+  geom_point( size=0.5, color="red", fill=alpha("red", 0.3), alpha=0.7, shape=1, stroke=2) 
+
+#Crear una variable tiempo t=1/n, 2/n, 3/n, ..., 1 .
+w <- c((data$x/100))
+
+#integrar en nuevo vector W al data frame
+data <- cbind(w,data)
+
+#Plot 3 (inluída la variable tiempo)
+ggplot(data, aes(x=w, y=y)) +
+  geom_segment( aes(x=w, xend=w, y=0, yend=y)) +
+  geom_point( size=0.5, color="green", fill=alpha("black", 0.4), alpha=0.6, shape=1, stroke=2) 
+
+#Plot 4 (acumulada utilizando variable tiempo)
+ggplot(data, aes(x=w, y=z)) +
+  geom_segment( aes(x=w, xend=w, y=0, yend=z)) +
+  geom_point( size=0.5, color="yellow", fill=alpha("black", 0.4), alpha=0.6, shape=1, stroke=2) 
